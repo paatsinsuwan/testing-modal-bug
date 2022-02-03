@@ -1,0 +1,107 @@
+<!doctype html>
+{{ save_i18n htmlWebpackPlugin.options.data }}
+<html lang="{{i18n "base_lang"}}" {{#if htmlWebpackPlugin.options.enableRTL }}dir="rtl"{{/if}}>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Language" content="en">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>{{ htmlWebpackPlugin.options.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"
+  />
+  <meta name="description" content="{{ htmlWebpackPlugin.options.description }}">
+  <link rel="icon" href="//www.ibm.com/favicon.ico" />
+  <meta name="dcterms.date" content="1955-11-05" />
+  <meta name="dcterms.rights" content="© Copyright IBM Corp. 2021" />
+  <meta name="geo.country" content="US" />
+  <meta name="robots" content="index,follow" />
+
+  {{#if htmlWebpackPlugin.options.data.base_languages }}
+  <link rel="alternate" hrefLang="x-default" href="{{ htmlWebpackPlugin.options.altlangRootPath }}/{{htmlWebpackPlugin.options.data.base_lang_default}}/index.html"/>
+    {{#each htmlWebpackPlugin.options.data.base_languages}}
+  <link rel="alternate" hrefLang="{{this}}" href="{{ ../htmlWebpackPlugin.options.altlangRootPath }}/{{this}}/index.html"/>
+    {{/each}}
+  {{/if}}
+
+  <!-- Carbon theme zoning classes pulling from the "Latest" CDN -->
+  <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/themes.css" />
+
+  <script>
+    digitalData = {
+      page: {
+        category: {
+          primaryCategory: '' // e.g. SB03
+        },
+        pageInfo: {
+          effectiveDate: '', // e.g. 2014-11-19
+          expiryDate: '', // e.g. 2017-11-19
+          language: '{{i18n "base_lang"}}', // e.g. en-US, automatically updated
+          publishDate: '', // e.g. 2014-11-19
+          publisher: '', // e.g. IBM Corporation
+          version: 'Carbon for IBM.com',
+          ibm: {
+            contentDelivery: '', // e.g. ECM/Filegen
+            contentProducer: '', // e.g. ECM/IConS Adopter 34 - GS83J2343G3H3ERG - 11/19/2014 05:14:02 PM
+            country: '{{i18n "base_country"}}', // e.g. US, automatically updated
+            industry: '', // e.g. B,U
+            owner: '', // e.g. Some Person/City/IBM
+            siteID: '', // e.g. MySiteID
+            subject: '', // e.g. SW492
+            type: '' // e.g CT305
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Suppress custom elements until styles are loaded -->
+  <style>
+    dds-dotcom-shell-container:not(:defined) {
+      display: none;
+    }
+  </style>
+
+  {{#if htmlWebpackPlugin.options.enableRTL }}
+    {{#each htmlWebpackPlugin.files.css}}
+      {{#contains ".rtl.css" this }}
+        <link href="{{ this }}" rel="stylesheet" />
+      {{/contains}}
+    {{/each}}
+  {{else}}
+    {{#each htmlWebpackPlugin.files.css}}
+      {{#no_contains ".rtl.css" this }}
+        <link href="{{ this }}" rel="stylesheet" />
+      {{/no_contains}}
+    {{/each}}
+  {{/if}}
+
+  <!-- IBM Tag Management and Site Analytics -->
+  <script src="//1.www.s81c.com/common/stats/ibm-common.js" async="async"></script>
+</head>
+
+<body>
+{{#if htmlWebpackPlugin.options.data.base_languages }}
+  <dds-dotcom-shell-container>
+  {{> @partial-block }}
+  </dds-dotcom-shell-container>
+{{else}}
+  <dds-dotcom-shell-container disable-locale-button="true">
+  {{> @partial-block }}
+  </dds-dotcom-shell-container>
+{{/if}}
+
+{{#if htmlWebpackPlugin.options.enableRTL }}
+  {{#each htmlWebpackPlugin.files.js}}
+    {{#contains ".rtl.js" this }}
+  <script src="{{ this }}" defer></script>
+    {{/contains}}
+  {{/each}}
+{{else}}
+  {{#each htmlWebpackPlugin.files.js}}
+    {{#no_contains ".rtl.js" this }}
+  <script src="{{ this }}" defer></script>
+    {{/no_contains}}
+  {{/each}}
+{{/if}}
+</body>
+</html>
